@@ -76,14 +76,11 @@ async def connect_and_read(address: str, timeout: float, is_metric: bool) -> Non
     try:
         print(f"Connecting to {target.address} ...")
         device = await client.update_device(target)
+        print_device(device)
     except UnsupportedDeviceError:
-        print("The device is not a supported Airthings device.")
-        return
+        logger.error("The device is not a supported Airthings device.")
     except Exception as exc:  # pylint: disable=broad-except
-        print(f"Error connecting/reading device: {exc}")
-        return
-
-    print_device(device)
+        logger.error(f"Error connecting/reading device: {exc}")
 
 
 async def auto_find_and_read(timeout: float, is_metric: bool) -> None:
