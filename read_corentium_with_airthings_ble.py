@@ -94,7 +94,7 @@ async def auto_find_and_read(timeout: float, is_metric: bool) -> None:
         return
 
     # Try to find likely Airthings devices by name, then attempt to read
-    candidates = [d for d in devices if (d.name or "").lower().find("airthings") != -1 or (d.name or "").lower().find("corentium") != -1]
+    candidates = d # [d for d in devices if (d.name or "").lower().find("airthings") != -1 or (d.name or "").lower().find("corentium") != -1]
     if not candidates:
         print("No devices with 'airthings' or 'corentium' in name found. Use --connect with address to try a specific device.")
         return
