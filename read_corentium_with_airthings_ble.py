@@ -40,14 +40,12 @@ async def scan(timeout: float):
         print("No BLE devices found")
         return []
 
-    print(f"Found {len(devices)} device(s):")
-    for d in devices:
-        print(d)
+    print(f"Found {len(devices)} device(s)")
     return devices
 
 
 def print_device(device) -> None:
-    print("\nDevice info:")
+    print("Device info:")
     print(f"  Name: {device.name}")
     print(f"  Model: {device.model.product_name if device.model else device.model}")
     print(f"  Manufacturer: {device.manufacturer}")
@@ -57,6 +55,7 @@ def print_device(device) -> None:
     print("Sensors:")
     for k, v in sorted(device.sensors.items()):
         print(f"  {k}: {v}")
+    print("\n")
 
 
 async def connect_and_read(address: str, timeout: float, is_metric: bool) -> None:
@@ -93,24 +92,18 @@ async def auto_find_and_read(timeout: float, is_metric: bool) -> None:
         print("No BLE devices found")
         return
 
-    # Try to find likely Airthings devices by name, then attempt to read
-    candidates = d # [d for d in devices if (d.name or "").lower().find("airthings") != -1 or (d.name or "").lower().find("corentium") != -1]
-    if not candidates:
-        print("No devices with 'airthings' or 'corentium' in name found. Use --connect with address to try a specific device.")
-        return
-
     logger = logging.getLogger("airthings_ble_example")
     client = AirthingsBluetoothDeviceData(logger=logger, is_metric=is_metric)
 
-    for d in candidates:
+    for d in devices:
         try:
             print(f"Attempting to read {d.address} ({d.name})")
             device = await client.update_device(d)
             print_device(device)
         except UnsupportedDeviceError:
-            print(f"Unsupported Airthings device at {d.address}")
+            logger.error(f"Unsupported Airthings device at {d.address}")
         except Exception as exc:  # pylint: disable=broad-except
-            print(f"Error reading {d.address}: {exc}")
+            logger.error(f"Error reading {d.address}: {exc}")
 
 
 def main():
