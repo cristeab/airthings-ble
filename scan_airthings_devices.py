@@ -5,12 +5,10 @@ Example: read data from Airthings Corentium Home 2 using the
 
 Usage:
   - List discovered devices:
-      python read_corentium_with_airthings_ble.py --timeout 8
+      python scan_airthings_devices.py --timeout 8
 
   - Connect to a device and print its sensors:
-      python read_corentium_with_airthings_ble.py --connect AA:BB:CC:DD:EE:FF
-
-Requires: `bleak` and `airthings-ble` installed in the environment.
+      python scan_airthings_devices.py --connect AA:BB:CC:DD:EE:FF
 """
 from __future__ import annotations
 
